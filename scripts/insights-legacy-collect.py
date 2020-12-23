@@ -1,6 +1,6 @@
 """
 Collect data needed for the Insights tab from data produced by the
-insights-legacy-collect.py script and stored into variables like
+insights-legacy-extract.py script and stored into variables like
 data_2020_01_23, data_2020_04_20, data_2020_11_12, data_2020_12_21.
 
 The RECENT variable contains the export of the ./manage.py dumpdata insights.
