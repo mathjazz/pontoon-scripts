@@ -1,2 +1,2 @@
-# pontoon-scripts
-Various scripts for Pontoon
+# Pontoon scripts
+Various scripts for [Pontoon](https://github.com/mozilla/pontoon/).
