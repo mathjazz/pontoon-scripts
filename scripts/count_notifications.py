@@ -7,15 +7,24 @@ from pontoon.base.models import *
 from notifications.models import Notification
 from datetime import datetime
 
-notifications_h2_2020 = Notification.objects.filter(
-    timestamp__gte=datetime(2020, 7, 1),
-    timestamp__lte=datetime(2020, 12, 31),
+START = datetime(2021, 4, 5)
+END = datetime(2021, 4, 19)
+
+notifications = Notification.objects.filter(
+    timestamp__gte=START,
+    timestamp__lte=END,
 )
 
-read_notifications_h2_2020 = notifications_h2_2020.filter(unread=False)
+read_notifications = notifications.filter(unread=False)
 
-notifications_h2_2020.count()
-read_notifications_h2_2020.count()
+notifications.count()
+read_notifications.count()
 
-notifications_h2_2020.values_list("recipient").distinct().count()
-read_notifications_h2_2020.values_list("recipient").distinct().count()
+recipients = notifications.values_list("recipient").distinct()
+read_recipients = read_notifications.values_list("recipient").distinct()
+
+recipients.count()
+read_recipients.count()
+
+logged_in = User.objects.filter(last_login__gte=START)
+logged_in.count()
