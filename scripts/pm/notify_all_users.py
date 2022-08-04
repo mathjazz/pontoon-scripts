@@ -18,10 +18,10 @@ were updated to include the Mozilla Community Participation Guidelines.
 Please <a href="https://pontoon.mozilla.org/terms/">take a look</a>.
 """
 
-for index, item in enumerate(users):
+for index, recipient in enumerate(users):
     notify.send(
         sender,
-        recipient=sender,
+        recipient=recipient,
         verb="has sent you a message",
         description=message,
         identifier=uuid.uuid4().hex
