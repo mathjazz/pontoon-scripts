@@ -17,7 +17,12 @@ class XMLCombiner(object):
         if len(filenames) == 0:
             raise FileNotFoundError("Invalid path, or path contains no valid files.")
 
-        self.roots = [et.parse(f).getroot() for f in filenames]
+        try:
+            self.roots = [et.parse(f).getroot() for f in filenames]
+        except SyntaxError:
+            print(
+                "Invalid tbx file, possibly due to incorrect locale code. Check your locales file to ensure all locale codes are valid."
+            )
 
     def combine(self):
         for r in self.roots[1:]:

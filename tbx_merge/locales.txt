@@ -6,7 +6,7 @@ fr
 hi-IN
 id
 it
-jp
+ja
 ko
 ms
 nl
