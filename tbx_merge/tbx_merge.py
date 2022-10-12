@@ -1,3 +1,4 @@
+from copy import deepcopy
 import os
 import argparse
 import requests
@@ -57,7 +58,7 @@ class XMLCombiner(object):
 
 
 def extract_smartling_id_term(f):
-    """ "Creates a dictionary with (term, definition) as key, and the Smartling UID as value."""
+    """Creates a dictionary with (term, definition) as key, and the Smartling UID as value."""
     root = et.parse(f).getroot()
     smartling_map = {}
     for termEntry in root.iter("termEntry"):
@@ -134,6 +135,31 @@ def export_tbx(locale_list):
     return list(Path(locale_path).glob("*.tbx"))
 
 
+def convert_locale_codes(etree):
+    smartling_locales = {
+        "de": ["de-DE"],
+        "fr": ["fr-CA", "fr-FR"],
+        "id": ["id-ID"],
+        "it": ["it-IT"],
+        "ja": ["ja-JP"],
+        "ko": ["ko-KR"],
+        "nl": ["nl-NL"],
+        "pl": ["pl-PL"],
+        "ru": ["ru-RU"],
+    }
+    root = etree.getroot()
+    for key, value in smartling_locales.items():
+        for termEntry in root.iter("termEntry"):
+            for langSet in termEntry.iter("langSet"):
+                if langSet.attrib[f"{{{nsmap['xml']}}}lang"] == key:
+                    langSet.attrib[f"{{{nsmap['xml']}}}lang"] = value[0]
+                    if len(value) > 1:
+                        for locale in value[1:]:
+                            langSetCopy = deepcopy(langSet)
+                            langSetCopy.attrib[f"{{{nsmap['xml']}}}lang"] = locale
+                            termEntry.append(langSetCopy)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -174,6 +200,7 @@ def main():
     if args.ids == "smartling":
         smartling_map = extract_smartling_id_term(args.smartling_export)
         replace_pontoon_ids(merged_tree, smartling_map)
+        convert_locale_codes(merged_tree)
         merged_tree.write(
             "smartling_merge_glossary.tbx", encoding="UTF-8", xml_declaration=True
         )
