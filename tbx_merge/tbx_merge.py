@@ -136,25 +136,28 @@ def export_tbx(locale_list):
 
 
 def convert_locale_codes(etree):
-    smartling_locales = {
+    smartling_locale_map = {
         "de": ["de-DE"],
         "fr": ["fr-CA", "fr-FR"],
         "id": ["id-ID"],
         "it": ["it-IT"],
         "ja": ["ja-JP"],
         "ko": ["ko-KR"],
+        "ms-MY": ["ms-MY"],
         "nl": ["nl-NL"],
         "pl": ["pl-PL"],
         "ru": ["ru-RU"],
+        "tr": ["tr-TR"],
+        "vi": ["vi-VN"],
     }
     root = etree.getroot()
-    for key, value in smartling_locales.items():
+    for mozilla_locale, smartling_locales in smartling_locale_map.items():
         for termEntry in root.iter("termEntry"):
             for langSet in termEntry.iter("langSet"):
-                if langSet.attrib[f"{{{nsmap['xml']}}}lang"] == key:
-                    langSet.attrib[f"{{{nsmap['xml']}}}lang"] = value[0]
-                    if len(value) > 1:
-                        for locale in value[1:]:
+                if langSet.attrib[f"{{{nsmap['xml']}}}lang"] == mozilla_locale:
+                    langSet.attrib[f"{{{nsmap['xml']}}}lang"] = smartling_locales[0]
+                    if len(smartling_locales) > 1:
+                        for locale in smartling_locales[1:]:
                             langSetCopy = deepcopy(langSet)
                             langSetCopy.attrib[f"{{{nsmap['xml']}}}lang"] = locale
                             termEntry.append(langSetCopy)
