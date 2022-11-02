@@ -143,7 +143,7 @@ def convert_locale_codes(etree):
         "it": ["it-IT"],
         "ja": ["ja-JP"],
         "ko": ["ko-KR"],
-        "ms-MY": ["ms-MY"],
+        "ms": ["ms-MY"],
         "nl": ["nl-NL"],
         "pl": ["pl-PL"],
         "ru": ["ru-RU"],
