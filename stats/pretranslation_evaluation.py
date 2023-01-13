@@ -30,6 +30,7 @@ pt_users = User.objects.filter(
 pretranslations = (
     Translation.objects.filter(user__in=pt_users)
     .filter(Q(approved=True) | Q(rejected=True))
+    .prefetch_related("actionlog_set")
     .order_by("entity__resource__project", "locale__code", "pk")
 )
 
@@ -49,7 +50,11 @@ for i, t in enumerate(pretranslations):
         entity.pk,
     )
     translation_time = t.date
-    review_time = t.approved_date if t.approved else t.rejected_date
+    if t.approved:
+        action_type = "translation:approved"
+    else:
+        action_type = "translation:rejected"
+    review_time = t.actionlog_set.filter(action_type=action_type).first().created_at
     time_to_review = (review_time - translation_time).total_seconds()
     status = "approved" if t.approved else "rejected"
     comment = t.comments.first()
