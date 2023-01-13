@@ -37,7 +37,7 @@ pretranslations = (
 for i, t in enumerate(pretranslations):
     if i == 0:
         print(
-            "Project\tLocale\tString\tTranslation time\tReview time\tHours to review\tStatus\tRating\tComment"
+            "Project,Locale,String,Translation time,Review time,Hours to review,Status,Rating,Comment"
         )
     entity = t.entity
     resource = entity.resource
@@ -67,7 +67,7 @@ for i, t in enumerate(pretranslations):
         "0" if status == "approved" else comment_content[0] if comment_content else ""
     )
     print(
-        '{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t"{}"'.format(
+        '{},{},{},{},{},{},{},{},"{}"'.format(
             project,
             locale,
             url,
