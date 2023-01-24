@@ -34,11 +34,10 @@ pretranslations = (
     .order_by("entity__resource__project", "locale__code", "pk")
 )
 
-for i, t in enumerate(pretranslations):
-    if i == 0:
-        print(
-            "Project,Locale,String,Translation time,Review time,Hours to review,Status,Rating,Comment"
-        )
+output = [
+    "Project,Locale,String,Translation time,Review time,Hours to review,Status,Rating,Comment"
+]
+for t in pretranslations:
     entity = t.entity
     resource = entity.resource
     project = resource.project.slug
@@ -66,7 +65,7 @@ for i, t in enumerate(pretranslations):
     rating = (
         "0" if status == "approved" else comment_content[0] if comment_content else ""
     )
-    print(
+    output.append(
         '{},{},{},{},{},{},{},{},"{}"'.format(
             project,
             locale,
@@ -79,3 +78,5 @@ for i, t in enumerate(pretranslations):
             comment_content,
         )
     )
+
+print("\n".join(output))
