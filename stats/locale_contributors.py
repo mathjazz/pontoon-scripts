@@ -35,10 +35,11 @@ LOCALES = [
 ]
 MONTHS_AGO = 6
 ROLES = [
-    # 'admin',
-    # 'contributor',
-    "manager",
-    'translator',
+    # 'Admin',
+    # 'Contributor',
+    'Manager',
+    'Translator',
+    'System User',
 ]
 
 
