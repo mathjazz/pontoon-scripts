@@ -33,7 +33,8 @@ LOCALES = [
     'ta', 'te', 'tg', 'th', 'tl', 'tr', 'trs', 'tsz', 'tt', 'tzm', 'uk', 'ur',
     'uz', 'vec', 'vi', 'wo', 'xcl', 'xh', 'yo', 'zam', 'zgh', 'zh-CN', 'zh-TW'
 ]
-MONTHS_AGO = 6
+START_DATE = (2022, 1, 1)
+END_DATE = (2022, 12, 31)
 ROLES = [
     # 'Admin',
     # 'Contributor',
@@ -58,7 +59,8 @@ locales = Locale.objects.all()
 if LOCALES:
     locales = Locale.objects.filter(code__in=LOCALES)
 
-start_date = timezone.now() + relativedelta(months=-MONTHS_AGO)
+start_date = timezone.datetime(*START_DATE)
+end_date = timezone.datetime(*END_DATE)
 
 
 def get_profile(username):
@@ -96,7 +98,7 @@ output.append(
     "Locale,Date Joined,Latest Activity,Profile URL,Role,Translations,Approved,Rejected,Pending,Ratio"
 )
 for locale in locales:
-    contributors = users_with_translations_counts(start_date, Q(locale=locale), None)
+    contributors = users_with_translations_counts(start_date, Q(locale=locale, date__lte=end_date), None)
     for contributor in contributors:
         role = contributor.locale_role(locale)
         if role not in ROLES:
