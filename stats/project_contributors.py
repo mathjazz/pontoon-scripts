@@ -38,8 +38,8 @@ projects = Project.objects.all()
 if PROJECTS:
     projects = projects.filter(slug__in=PROJECTS)
 
-start_date = timezone.datetime(*START_DATE)
-end_date = timezone.datetime(*END_DATE)
+start_date = timezone.datetime(*START_DATE, tzinfo=timezone.utc)
+end_date = timezone.datetime(*END_DATE, tzinfo=timezone.utc)
 
 
 def get_profile(username):
