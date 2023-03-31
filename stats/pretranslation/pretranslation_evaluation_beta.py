@@ -1,5 +1,8 @@
 """
 Retrieve a list of pretranslated strings and print its metadata.
+
+This is used in the beta phase, with strings only scored via algorithm.
+
 Output is formatted as CSV with the following columns:
 
 * Project slug
@@ -10,8 +13,6 @@ Output is formatted as CSV with the following columns:
 * Hours to review
 * Status
 * chrF++ Score
-* Rating
-* Comment
 
 Run the script in Pontoon's Django shell, e.g.:
 heroku run --app mozilla-pontoon ./manage.py shell
@@ -39,7 +40,7 @@ pretranslations = (
 )
 
 output = [
-    "Project,Locale,String,Translation time,Review time,Hours to review,Status,chrF++ Score,Rating,Comment"
+    "Project,Locale,String,Translation time,Review time,Hours to review,Status,chrF++ Score"
 ]
 
 for t in pretranslations:
@@ -63,16 +64,8 @@ for t in pretranslations:
     status = "approved" if t.approved else "rejected"
     ter_score = chrfpp.sentence_score(t.string, [Translation.objects.get(entity=entity, approved=True, locale=t.locale).string])
     comment = t.comments.first()
-    comment_content = str(
-        html.unescape(comment.content.removeprefix("<p>").removesuffix("</p>"))
-        if comment
-        else ""
-    )
-    rating = (
-        "0" if status == "approved" else comment_content[0] if comment_content else ""
-    )
     output.append(
-        '{},{},{},{},{},{},{},{},{},"{}"'.format(
+        '{},{},{},{},{},{},{},{}'.format(
             project,
             locale,
             url,
@@ -81,8 +74,6 @@ for t in pretranslations:
             math.ceil(time_to_review / 3600),
             status,
             float(ter_score.format(score_only=True)),
-            rating,
-            comment_content,
         )
     )
 
