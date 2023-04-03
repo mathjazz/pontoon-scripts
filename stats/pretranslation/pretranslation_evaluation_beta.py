@@ -18,8 +18,9 @@ Run the script in Pontoon's Django shell, e.g.:
 heroku run --app mozilla-pontoon ./manage.py shell
 """
 
-import html
 import math
+from datetime import datetime
+from django.utils.timezone import get_current_timezone
 from pontoon.base.models import *
 from sacrebleu.metrics import CHRF
 
@@ -32,8 +33,12 @@ pt_users = User.objects.filter(
     ]
 )
 
+START_DATE = "01/04/2023"
+tz = get_current_timezone()
+start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
+
 pretranslations = (
-    Translation.objects.filter(user__in=pt_users)
+    Translation.objects.filter(user__in=pt_users, date__gte=start_date)
     .filter(Q(approved=True) | Q(rejected=True))
     .prefetch_related("actionlog_set")
     .order_by("entity__resource__project", "locale__code", "pk")
