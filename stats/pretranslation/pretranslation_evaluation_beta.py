@@ -47,7 +47,7 @@ pretranslations = (
 output = [
     "Project,Locale,String,Translation time,Review time,Hours to review,Status,chrF++ Score"
 ]
-
+errors = []
 for t in pretranslations:
     entity = t.entity
     resource = entity.resource
@@ -67,7 +67,11 @@ for t in pretranslations:
     review_time = t.actionlog_set.filter(action_type=action_type).first().created_at
     time_to_review = (review_time - translation_time).total_seconds()
     status = "approved" if t.approved else "rejected"
-    ter_score = chrfpp.sentence_score(t.string, [Translation.objects.get(entity=entity, approved=True, locale=t.locale).string])
+    try:
+        score = chrfpp.sentence_score(t.string, [Translation.objects.get(entity=entity, approved=True, locale=t.locale).string])
+    except Translation.DoesNotExist:
+        errors.append(f"No approved translation available for: {url}.")
+        continue
     comment = t.comments.first()
     output.append(
         '{},{},{},{},{},{},{},{}'.format(
@@ -78,8 +82,12 @@ for t in pretranslations:
             review_time.strftime("%d-%m-%Y %H:%M:%S"),
             math.ceil(time_to_review / 3600),
             status,
-            float(ter_score.format(score_only=True)),
+            float(score.format(score_only=True)),
         )
     )
+
+if errors:
+    output.append(f"\n*** IGNORED STRINGS ({len(errors)}) ***")
+    output += errors
 
 print("\n".join(output))
