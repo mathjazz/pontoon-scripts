@@ -26,4 +26,4 @@ for index, recipient in enumerate(users):
         description=message,
         identifier=uuid.uuid4().hex
     )
-    print index
+    print(index)
