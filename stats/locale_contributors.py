@@ -182,7 +182,7 @@ ROLES = [
 
 # Script
 from __future__ import division
-from dateutil.relativedelta import relativedelta
+from django.utils.timezone import get_current_timezone
 from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse
@@ -195,9 +195,9 @@ locales = Locale.objects.all()
 if LOCALES:
     locales = Locale.objects.filter(code__in=LOCALES)
 
-start_date = timezone.datetime(*START_DATE)
-end_date = timezone.datetime(*END_DATE)
-
+tz = get_current_timezone()
+start_date = timezone.datetime(*START_DATE, tzinfo=tz)
+end_date = timezone.datetime(*END_DATE, tzinfo=tz)
 
 def get_profile(username):
     from urllib.parse import urljoin
