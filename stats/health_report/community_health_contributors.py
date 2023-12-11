@@ -118,7 +118,7 @@ output = [
     f"End date: {end_date.strftime('%Y-%m-%d')}\n",
 ]
 output.append(
-    "Locale,Profile URL,Role,Date Joined,Last Login (date),Last Login (months ago),Latest Activity,Reviews,Approved,Rejected,Pending"
+    "Locale,Profile URL,Role,Date Joined,Last Login (date),Last Login (time ago),Latest Activity,Reviews,Approved,Rejected,Pending"
 )
 for locale in locales:
     contributors = users_with_translations_counts(
@@ -134,19 +134,10 @@ for locale in locales:
         if contributor.username in EXCLUDED_USERS:
             continue
         output.append(
-            "{},{},{},{},{},{},{},{},{},{},{}".format(
-                locale.code,
-                get_profile(contributor.username),
-                role,
-                contributor.date_joined.date(),
-                last_login(contributor),
-                time_since_login(contributor),
-                contributor.latest_action.created_at.strftime('%Y-%m-%d'),
-                contribution_data.get(contributor.username, {}).get("total", 0),
-                contributor.translations_approved_count,
-                contributor.translations_rejected_count,
-                contributor.translations_unapproved_count,
-            )
+            f"{locale.code},{get_profile(contributor.username)},{role},"
+            f"{contributor.date_joined.date()},{last_login(contributor)},\"{time_since_login(contributor)}\","
+            f"{contributor.latest_action.created_at.strftime('%Y-%m-%d')},{contribution_data.get(contributor.username, {}).get('total', 0)},"
+            f"{contributor.translations_approved_count},{contributor.translations_rejected_count},{contributor.translations_unapproved_count}"
         )
 
 print("\n".join(output))
