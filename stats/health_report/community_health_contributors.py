@@ -27,8 +27,8 @@ LOCALES = [
     "tr", "el", "zh-TW", "fi", "pt-PT", "sv-SE", "vi", "sk", "ar"
 ]
 EXCLUDED_USERS = ["Imported", "google-translate", "translation-memory"]
+START_DATE = "01/01/2023"  # DD/MM/YYYY
 END_DATE = "31/12/2023"  # DD/MM/YYYY
-DAYS_INTERVAL = 365
 LOCALES.sort()
 
 # Script
@@ -47,7 +47,7 @@ from urllib.parse import urljoin
 
 tz = get_current_timezone()
 end_date = tz.localize(datetime.strptime(END_DATE, "%d/%m/%Y"))
-start_date = end_date - relativedelta(days=DAYS_INTERVAL)
+start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
 
 
 def last_login(user):
