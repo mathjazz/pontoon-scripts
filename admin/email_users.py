@@ -35,7 +35,7 @@ for email in emails:
   msg = EmailMultiAlternatives(
     subject=subject,
     body=text,
-    from_email='Mozilla L10n Team <pontoon-team@mozilla.com>',
+    from_email='Mozilla L10n Team <team@pontoon.mozilla.com>',
     # Do not put the entire list into the "to" field
     # or everyone will see all email addresses.
     to=[email]

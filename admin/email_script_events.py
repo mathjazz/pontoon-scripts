@@ -3,6 +3,7 @@ Send email to all users who submitted at least 5 approved translations in the la
 """
 
 from django.core.mail import EmailMultiAlternatives
+from django.db.models import Count
 from pontoon.base.models import *
 from datetime import datetime
 
@@ -82,7 +83,7 @@ for email in emails:
     msg = EmailMultiAlternatives(
         subject=subject,
         body=text,
-        from_email="Mozilla L10n Team <pontoon-team@mozilla.com>",
+        from_email="Mozilla L10n Team <team@pontoon.mozilla.com>",
         # Do not put the entire list into the "to" field
         # or everyone will see all email addresses.
         to=[email],
