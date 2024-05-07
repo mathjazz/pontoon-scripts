@@ -49,8 +49,8 @@ LOCALES = [
     "ar",
 ]
 EXCLUDED_USERS = ["Imported", "google-translate", "translation-memory"]
-START_DATE = "01/01/2023"  # DD/MM/YYYY
-END_DATE = "31/12/2023"  # DD/MM/YYYY
+START_DATE = "01/05/2023"  # DD/MM/YYYY
+END_DATE = "01/05/2024"  # DD/MM/YYYY
 LOCALES.sort()
 
 # Script
@@ -67,8 +67,8 @@ from pontoon.contributors.utils import users_with_translations_counts
 from urllib.parse import urljoin
 
 tz = get_current_timezone()
-end_date = tz.localize(datetime.strptime(END_DATE, "%d/%m/%Y"))
-start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
+end_date = datetime.strptime(END_DATE, "%d/%m/%Y").replace(tzinfo=tz)
+start_date = datetime.strptime(START_DATE, "%d/%m/%Y").replace(tzinfo=tz)
 
 
 def last_login(user):
