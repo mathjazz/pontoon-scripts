@@ -9,9 +9,6 @@ from datetime import datetime
 
 MIN_COUNT = 5
 START_DATE = datetime(2023, 4, 15)
-EXCLUDED_EMAILS = [
-    "adm@prnet.info",
-]
 
 contributors = (
     Translation.objects.filter(
@@ -26,11 +23,12 @@ contributors = (
 contributors_with_min_count = [
     c["user"] for c in contributors if c["count"] >= MIN_COUNT
 ]
+
 users = User.objects.filter(pk__in=contributors_with_min_count).exclude(
-    profile__system_user=True
+    profile__email_communications_enabled=False
 )
-# Exclude users that explicitly opted out
-emails = [u.contact_email for u in users if u.contact_email not in EXCLUDED_EMAILS]
+
+emails = [u.contact_email for u in users]
 
 subject = "Localization Fireside Chat: we want your questions!"
 
@@ -55,7 +53,7 @@ Here is the list of our other communication channels where the day and time of t
 Thank you,
 Mozilla L10n Team
 
-P.S. Please reply with “unsubscribe” to stop receiving these messages.
+P.S. To stop receiving these messages, go to your Settings in Pontoon and disable Email communications.
 
 """
 
@@ -76,7 +74,7 @@ Here is the list of our other communication channels where the day and time of t
 <br><br>
 Thank you,<br>
 Mozilla L10n Team<br><br>
-P.S. Please reply with “unsubscribe” to stop receiving these messages.
+P.S. To stop receiving these messages, go to your <a href="https://pontoon.mozilla.org/settings/">Settings in Pontoon</a> and disable Email communications.
 """
 
 for email in emails:
