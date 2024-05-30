@@ -28,8 +28,6 @@ users = User.objects.filter(pk__in=contributors_with_min_count).exclude(
     profile__email_communications_enabled=False
 )
 
-emails = [u.contact_email for u in users]
-
 subject = "Localization Fireside Chat: we want your questions!"
 
 text = """Hello localizers,
@@ -53,8 +51,9 @@ Here is the list of our other communication channels where the day and time of t
 Thank you,
 Mozilla L10n Team
 
-P.S. To stop receiving these messages, go to your Settings in Pontoon and disable Email communications.
-
+P.S. You’re receiving this email as a contributor to Mozilla localization on Pontoon.
+To no longer receive emails like these, unsubscribe here:
+https://pontoon.mozilla.org/unsubscribe/{ uuid }
 """
 
 html = """Hello localizers,
@@ -74,17 +73,19 @@ Here is the list of our other communication channels where the day and time of t
 <br><br>
 Thank you,<br>
 Mozilla L10n Team<br><br>
-P.S. To stop receiving these messages, go to your <a href="https://pontoon.mozilla.org/settings/">Settings in Pontoon</a> and disable Email communications.
+P.S. You’re receiving this email as a contributor to Mozilla localization on Pontoon.<br>
+To no longer receive emails like these, unsubscribe here: <a href="https://pontoon.mozilla.org/unsubscribe/{ uuid }">Unsubscribe</a>.
 """
 
-for email in emails:
+for user in users:
+    uuid = str(user.profile.unique_id)
     msg = EmailMultiAlternatives(
         subject=subject,
-        body=text,
+        body=text.replace("{ uuid }", uuid),
         from_email="Mozilla L10n Team <team@pontoon.mozilla.com>",
         # Do not put the entire list into the "to" field
         # or everyone will see all email addresses.
-        to=[email],
+        to=[user.contact_email],
     )
-    msg.attach_alternative(html, "text/html")
+    msg.attach_alternative(html.replace("{ uuid }", uuid), "text/html")
     msg.send()
