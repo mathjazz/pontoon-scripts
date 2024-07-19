@@ -2,10 +2,13 @@
 Send email to all users who submitted at least 5 approved translations in the last 12 months.
 """
 
+from datetime import datetime
+
 from django.core.mail import EmailMultiAlternatives
 from django.db.models import Count
+
 from pontoon.base.models import *
-from datetime import datetime
+from pontoon.messaging.utils import html_to_plain_text_with_links
 
 MIN_COUNT = 5
 START_DATE = datetime(2023, 4, 15)
@@ -30,32 +33,6 @@ users = User.objects.filter(pk__in=contributors_with_min_count).exclude(
 
 subject = "Localization Fireside Chat: we want your questions!"
 
-text = """Hello localizers,
-
-We are excited to announce that we are organizing another edition of our Localization Fireside Chat at the end of the month (exact date and time to be announced next week through all our communication channels listed below).
-
-The meeting will be recorded to accommodate for availability and timezone issues. Here is the link to both the live and recorded session:
-https://mozilla.hosted.panopto.com/Panopto/Pages/Viewer.aspx?id=a11ac265-b003-488a-9686-b1550169ca3e
-
-If you’d like to submit any questions beforehand, you may do so here:
-https://forms.gle/7hNSwBBRs6BvoxFW8
-
-You will be able to ask questions live in our l10n Matrix channel, too:
-https://chat.mozilla.org/#/room/#l10n-community:mozilla.org
-
-Here is the list of our other communication channels where the day and time of the event will be announced as well:
-- Mastodon: https://mozilla.social/@localization
-- X: https://twitter.com/mozilla_l10n
-- Discourse: https://discourse.mozilla.org/c/l10n/
-
-Thank you,
-Mozilla L10n Team
-
-P.S. You’re receiving this email as a contributor to Mozilla localization on Pontoon.
-To no longer receive emails like these, unsubscribe here:
-https://pontoon.mozilla.org/unsubscribe/{ uuid }
-"""
-
 html = """Hello localizers,
 <br><br>
 We are excited to announce that we are organizing another edition of our Localization Fireside Chat at the end of the month (exact date and time to be announced next week through all our communication channels listed below).
@@ -76,6 +53,8 @@ Mozilla L10n Team<br><br>
 P.S. You’re receiving this email as a contributor to Mozilla localization on Pontoon.<br>
 To no longer receive emails like these, unsubscribe here: <a href="https://pontoon.mozilla.org/unsubscribe/{ uuid }">Unsubscribe</a>.
 """
+
+text = html_to_plain_text_with_links(html)
 
 for user in users:
     uuid = str(user.profile.unique_id)
