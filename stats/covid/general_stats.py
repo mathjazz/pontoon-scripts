@@ -15,8 +15,14 @@ heroku run --app mozilla-pontoon ./manage.py shell
 """
 
 import datetime
-from pontoon.base.models import *
+
+from collections import defaultdict
+
+from django.db.models import Count
 from django.db.models.functions import TruncMonth
+
+from pontoon.base.models import *
+
 
 data = {}
 
