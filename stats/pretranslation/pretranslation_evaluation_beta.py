@@ -20,6 +20,7 @@ heroku run --app mozilla-pontoon ./manage.py shell
 
 import math
 from datetime import datetime
+from django.db.models import Q
 from django.utils.timezone import get_current_timezone
 from pontoon.base.models import *
 from sacrebleu.metrics import CHRF
@@ -35,7 +36,7 @@ pt_users = User.objects.filter(
 
 START_DATE = "01/04/2023"
 tz = get_current_timezone()
-start_date = tz.localize(datetime.strptime(START_DATE, "%d/%m/%Y"))
+start_date = datetime.strptime(START_DATE, "%d/%m/%Y").replace(tzinfo=tz)
 
 pretranslations = (
     Translation.objects.filter(user__in=pt_users, date__gte=start_date)
