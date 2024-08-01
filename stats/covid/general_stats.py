@@ -8,6 +8,7 @@ Output is formatted as CSV with the following columns:
 * Number of active users
 * Number of all translations submitted (includes pretranslations and suggestions, excludes imported)
 * Number of approved translations submitted
+* Number of pretranslations submitted
 * Number of strings added
 
 Run the script in Pontoon's Django shell, e.g.:
@@ -102,10 +103,24 @@ for x in translations:
         data[period] = {}
     data[period]["approved_translations"] = x["count"]
 
+# Pretranslation Submissions
+translations = (
+    Translation.objects.filter(user__email__in=["pontoon-tm@example.com", "pontoon-gt@example.com"])
+    .annotate(period=TruncMonth("date"))
+    .values("period")
+    .annotate(count=Count("id"))
+    .order_by("period")
+)
+for x in translations:
+    period = "{}-{:02d}".format(x["period"].year, x["period"].month)
+    if not period in data:
+        data[period] = {}
+    data[period]["pretranslations"] = x["count"]
+
 # Generate output
 output = []
 output.append(
-    "Period,New User Registrations,Active Users,All Translations Submitted,Approved Translations Submitted,Strings Added"
+    "Period,New User Registrations,Active Users,All Translations Submitted,Approved Translations Submitted,Pretranslations Submitted,Strings Added"
 )
 periods = list(data.keys())
 periods.sort()
@@ -117,14 +132,16 @@ for period in periods:
     active = period_data["active"] if "active" in period_data else 0
     all_translations = period_data["all_translations"] if "all_translations" in period_data else 0
     approved_translations = period_data["approved_translations"] if "approved_translations" in period_data else 0
+    pretranslations = period_data["pretranslations"] if "pretranslations" in period_data else 0
     added = period_data["added"] if "added" in period_data else 0
     output.append(
-        "{},{},{},{},{},{}".format(
+        "{},{},{},{},{},{},{}".format(
             period,
             registrations,
             active,
             all_translations,
             approved_translations,
+            pretranslations,
             added,
         )
     )
