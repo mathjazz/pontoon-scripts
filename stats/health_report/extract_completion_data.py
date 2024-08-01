@@ -29,6 +29,7 @@ def main():
                 code
             },
             approvedStrings,
+            stringsWithWarnings,
             missingStrings,
             pretranslatedStrings,
             totalStrings
@@ -61,7 +62,9 @@ def main():
                     }
                 locale_data[locale]["missing"] += e["missingStrings"]
                 locale_data[locale]["pretranslated"] += e["pretranslatedStrings"]
-                locale_data[locale]["approved"] += e["approvedStrings"]
+                locale_data[locale]["approved"] += (
+                    e["approvedStrings"] + e["stringsWithWarnings"]
+                )
                 locale_data[locale]["total"] += e["totalStrings"]
                 locale_data[locale]["projects"] += 1
     except Exception as e:
