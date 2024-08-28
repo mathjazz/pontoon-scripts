@@ -2,21 +2,23 @@
 In case of DDOS, this script can be used to check if IPs are generating more
 traffic than usual.
 
-1) Download a portion of the log from Heroku and save it locally
-Open https://dashboard.heroku.com/apps/mozilla-pontoon/resources
+1) Download a portion of the log from Heroku and save it locally.
+THe easiest way is to use CLI, e.g.
 
-Click on `More` in the top right corner, `View logs`, then save the log after a
-few minutes.
+heroku logs --app mozilla-pontoon -n 50000 > log.txt
+
+Alternative methods here: https://devcenter.heroku.com/articles/logging#view-logs
 
 2) Populate `blocked_ips` with the IPs stored in the mozilla-pontoon app
    settings.
+
 Open https://dashboard.heroku.com/apps/mozilla-pontoon/resources
 
 Click `Reveal Config Vars`, then search for `BLOCKED_IPS`, copy and past the
 value as is.
 
 Usage:
-    check_ips_heroku_log (log file name)
+    check_ips_heroku_log log.txt
 """
 
 import re
