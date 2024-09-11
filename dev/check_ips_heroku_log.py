@@ -5,7 +5,10 @@ traffic than usual. By default, IPs with at least 10 occurences are listed.
 1) Download a portion of the log from Heroku and save it locally.
 The easiest way is to use CLI, e.g.
 
-heroku logs --app mozilla-pontoon -n 1500 > log.txt
+timeout 60 heroku logs --tail --app mozilla-pontoon > log.txt
+
+This command works around Heroku's 1500 lines limit, reading the log for 60
+seconds instead.
 
 Alternative methods here: https://devcenter.heroku.com/articles/logging#view-logs
 
@@ -20,8 +23,8 @@ value as is.
 3) Update the `BLOCKED_IPS` config var with listed IP addresses.
 
 Usage:
-    check_ips_heroku_log log.txt
-    check_ips_heroku_log --threshold 50 log.txt
+    python check_ips_heroku_log.py log.txt
+    python check_ips_heroku_log.py --threshold 50 log.txt
 """
 
 from ipaddress import ip_address, ip_network
