@@ -5,7 +5,7 @@ traffic than usual. By default, IPs with at least 10 occurences are listed.
 1) Download a portion of the log from Heroku and save it locally.
 The easiest way is to use CLI, e.g.
 
-heroku logs --app mozilla-pontoon -n 500000 > log.txt
+heroku logs --app mozilla-pontoon -n 1500 > log.txt
 
 Alternative methods here: https://devcenter.heroku.com/articles/logging#view-logs
 
