@@ -7,6 +7,8 @@ The easiest way is to use CLI, e.g.
 
 timeout 60 heroku logs --tail --app mozilla-pontoon > log.txt
 
+On macOS you might need to run `brew install coreutils` to get `timeout`.
+
 This command works around Heroku's 1500 lines limit, reading the log for 60
 seconds instead.
 
