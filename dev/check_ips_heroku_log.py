@@ -1,6 +1,6 @@
 """
 In case of DDOS, this script can be used to check which IPs are generating more
-traffic than usual. By default, IPs with at least 10 occurences are listed.
+traffic than usual. By default, IPs with at least 10 occurrences are listed.
 
 1) Download a portion of the log from Heroku and save it locally.
 The easiest way is to use CLI, e.g.
@@ -35,6 +35,7 @@ import argparse
 import re
 import sys
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -58,7 +59,7 @@ def main():
     filter = re.compile(r"fwd=\"([\d.]+)\"")
 
     # Copy from Heroku settings
-    blocked_ip_setting=""
+    blocked_ip_setting = ""
 
     BLOCKED_IPS = []
     BLOCKED_IP_RANGES = []
@@ -92,14 +93,8 @@ def main():
     sorted_ips = dict(sorted(ips.items(), key=lambda item: item[1], reverse=True))
 
     output = {
-        "high": {
-            "message": "\nIPs with high activity:",
-            "ips": []
-        },
-        "blocked": {
-            "message": "\nIPs already blocked by current settings:",
-            "ips": []
-        }
+        "high": {"message": "\nIPs with high activity:", "ips": []},
+        "blocked": {"message": "\nIPs already blocked by current settings:", "ips": []},
     }
     for ip, count in sorted_ips.items():
         try:
@@ -129,6 +124,7 @@ def main():
             print("\n".join(data["ips"]))
         else:
             print("  -")
+
 
 if __name__ == "__main__":
     main()
