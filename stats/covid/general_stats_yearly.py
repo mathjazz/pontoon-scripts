@@ -14,8 +14,9 @@ Run the script in Pontoon's Django shell, e.g.:
 heroku run --app mozilla-pontoon ./manage.py shell
 """
 
-import datetime
+from collections import defaultdict
 from pontoon.base.models import *
+from django.db.models import Count
 from django.db.models.functions import TruncYear
 
 data = {}
