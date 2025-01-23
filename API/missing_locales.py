@@ -13,7 +13,7 @@ from urllib.request import urlopen
 
 def retrieve_pontoon_locales(project):
     query = f'{{project(slug:"{project}"){{name,localizations{{locale{{code}}}}}}}}'
-    url = f"https://pontoon.mozilla.org/graphql?query={urlquote(query)}"
+    url = f"https://pontoon.mozilla.org/graphql?query={urlquote(query)}&raw"
 
     try:
         response = urlopen(url)
