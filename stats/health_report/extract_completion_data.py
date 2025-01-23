@@ -40,7 +40,7 @@ def main():
     locale_data = {}
     try:
         print("Reading Pontoon stats...")
-        url = f"https://pontoon.mozilla.org/graphql?query={urlquote(query)}"
+        url = f"https://pontoon.mozilla.org/graphql?query={urlquote(query)}&raw"
         response = urlopen(url)
         json_data = json.load(response)
 
@@ -72,10 +72,13 @@ def main():
 
     # Calculate completion percentage
     for locale in locale_data:
-        locale_data[locale]["completion"] = round(
-            (locale_data[locale]["approved"] / locale_data[locale]["total"]) * 100,
-            2,
-        )
+        if locale_data[locale]["total"] > 0:
+            locale_data[locale]["completion"] = round(
+                (locale_data[locale]["approved"] / locale_data[locale]["total"]) * 100,
+                2,
+            )
+        else:
+            locale_data[locale]["completion"] = 0
 
     output = []
     output.append("Locale,Number of Projects,Completion,Approved strings,Total Strings")
