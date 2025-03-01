@@ -49,8 +49,10 @@ LOCALES = [
     "ar",
 ]
 EXCLUDED_USERS = ["Imported", "google-translate", "translation-memory"]
-START_DATE = "01/08/2023"  # DD/MM/YYYY
-END_DATE = "01/08/2024"  # DD/MM/YYYY
+# Example: if collecting date for February 2025, put 01/02/2024 as start
+# and 01/03/2025 as end date.
+START_DATE = "01/02/2024"  # DD/MM/YYYY
+END_DATE = "01/03/2025"  # DD/MM/YYYY
 LOCALES.sort()
 
 # Script
