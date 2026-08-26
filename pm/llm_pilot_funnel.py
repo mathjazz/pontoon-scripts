@@ -272,6 +272,8 @@ if MANUAL:
             else ""
         )
     )
+
+
 for action in sorted(COPY_ACTIONS - {"Machinery Translation Copied"}):
     emit(f"  {action:<38} {dropdown[action]:>8}")
 
