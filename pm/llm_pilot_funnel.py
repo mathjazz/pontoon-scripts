@@ -86,8 +86,8 @@ MANUAL = {
 
 # USD per million tokens for settings.OPENAI_MODEL. Leave as None to report
 # token counts without a cost estimate.
-PRICE_IN = None
-PRICE_OUT = None
+PRICE_IN = 4.0
+PRICE_OUT = 20.0
 
 SHOWN = {locale: stats["shown"] for locale, stats in LOG.items()}
 
