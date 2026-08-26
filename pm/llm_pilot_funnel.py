@@ -86,6 +86,7 @@ MANUAL = {
 
 # USD per million tokens for settings.OPENAI_MODEL. Leave as None to report
 # token counts without a cost estimate.
+# https://developers.openai.com/api/docs/models/gpt-5.6-sol
 PRICE_IN = 4.0
 PRICE_OUT = 20.0
 
